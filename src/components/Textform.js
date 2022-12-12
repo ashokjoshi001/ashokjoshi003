@@ -2,31 +2,47 @@ import React, {useState} from 'react'
 
 
 export default function Textform(props) {
+
+    const count = ()=>{
+        if (text.length > 0){
+            return text.trim().split(/[ ]+/).length;
+        }
+        else{
+            return 0;
+        }
+    }
+
     const handleUppClick = () =>{
         let newText = text.toUpperCase();
         setText(newText);
+        props.showAlert("Converted to uppercase", "success");
     }
     const handleloClick = () =>{
         let newText = text.toLowerCase();
         setText(newText);
+        props.showAlert("Converted to lowercase", "success");
     }
     const speak = () => {
         let msg = new SpeechSynthesisUtterance();
         msg.text = text;
         window.speechSynthesis.speak(msg);
+        props.showAlert("Switch to speak mode", "success");
     }
     const handleclearClick = () =>{
         // let newText = text.toLowerCase();
         setText("");
+        props.showAlert("Cleared text", "success");
     }
     const handleExtraSpaces = () => {
         let newText = text.split(/[ ]+/);
         setText(newText.join(" "));
+        props.showAlert("Extra spaces removed", "success");
     }
     const handleCopy = () => {
         var text = document.getElementById("myBox");
         text.select();
         navigator.clipboard.writeText(text.value);
+        props.showAlert("Copy to clipboard", "success");
     }
     const handleOnChange = (event)=>{
         // console.log("On Change");
@@ -49,7 +65,7 @@ export default function Textform(props) {
         </div>
         <div className="container my-3" style={{color:props.mode === 'dark' ? 'white' : '#042743'}}>
             <h2>Your text Summary</h2>
-            <p><b>{text.split(" ").length}</b> words and <b>{text.length}</b> characters</p>
+            <p><b>{count()}</b> words and <b>{text.length}</b> characters</p>
             <p><b>{(text.split(" ").length) * 0.008}</b> Minutes to read</p>
             <h2>Preview</h2>
             <p>{text.length > 0 ? text : "Enter something in the textbox above to preview it here"}</p>
